@@ -6,7 +6,7 @@ const FormInput = ({ children, inputRef, extraInputClass, extraContainerClass, .
       <input
         ref={inputRef}
         {...inputProps}
-        className={`py-4 px-5 bg-[#FAFAFA] w-full outline-0 placeholder:text-[#B0B0B0] placeholder:font-light duration-300 focus:bg-transparent ${extraInputClass}`}
+        className={`py-1 px-1 bg-[#FAFAFA] w-full outline-0 placeholder:text-[#B0B0B0] placeholder:font-light duration-300 focus:bg-transparent ${extraInputClass}`}
       />
     </div>
   );
