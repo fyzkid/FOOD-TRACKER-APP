@@ -10,31 +10,65 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  function handleLogin(e) {
+  // function handleLogin(e) {
+  //   e.preventDefault();
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!emailRegex.test(email)) {
+  //     return alert('Please enter a valid email');
+  //   } else {
+  //     // dummy data
+  //     const currentUser = {
+  //       name: 'John',
+  //       email: 'john@exmaple.com',
+  //       foodItems: [
+  //         { name: 'Milk', expiryDate: '2025-01-10T00:00:00Z' },
+  //         { name: 'Bread', expiryDate: '2025-01-13T00:00:00Z' },
+  //         { name: 'Apples', expiryDate: '2025-01-08T00:00:00Z' },
+  //         { name: 'Cheese', expiryDate: '2025-01-05T00:00:00Z' },
+  //       ],
+  //       notifications: [
+  //         { text: 'Milk is expiring today', timeStamp: '2025-01-05T00:00:00Z' },
+  //         { text: 'Bread expires in 2 days', timeStamp: '2025-01-05T13:00:00Z' },
+  //       ],
+  //       preferences: { dailyReminders: true, expiringSoonAlerts: true, darkMode: false },
+  //     };
+  //     sessionStorage.setItem('isAuthenticated', 'true');
+  //     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+  //     navigate('/dashboard');
+  //   }
+  // }
+
+  async function handleLogin(e) {
     e.preventDefault();
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return alert('Please enter a valid email');
-    } else {
-      // dummy data
-      const currentUser = {
-        name: 'John',
-        email: 'john@exmaple.com',
-        foodItems: [
-          { name: 'Milk', expiryDate: '2025-01-10T00:00:00Z' },
-          { name: 'Bread', expiryDate: '2025-01-13T00:00:00Z' },
-          { name: 'Apples', expiryDate: '2025-01-08T00:00:00Z' },
-          { name: 'Cheese', expiryDate: '2025-01-05T00:00:00Z' },
-        ],
-        notifications: [
-          { text: 'Milk is expiring today', timeStamp: '2025-01-05T00:00:00Z' },
-          { text: 'Bread expires in 2 days', timeStamp: '2025-01-05T13:00:00Z' },
-        ],
-        preferences: { dailyReminders: true, expiringSoonAlerts: true, darkMode: false },
-      };
+    }
+  
+    try {
+      const response = await fetch('https://freshtrackapi.onrender.com/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Login failed: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      sessionStorage.setItem('token', data.token);
       sessionStorage.setItem('isAuthenticated', 'true');
-      sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+      if (data.user) {
+        sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+      }
+  
       navigate('/dashboard');
+    } catch (error) {
+      alert(error.message);
     }
   }
 
@@ -76,7 +110,7 @@ const Login = () => {
 
         <p className='text-gray-500 text-sm mx-auto'>
           Don't have an account?&nbsp;
-          <Link href='/register' className='text-green-400'>
+          <Link to='/register' className='text-green-400'>
             Sign up
           </Link>
         </p>
