@@ -7,21 +7,19 @@ export const MainContext = createContext();
 
 const MainLayout = () => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(sessionStorage.getItem('currentUser') ?? '{}')
-  );
+  const [currentUser, setCurrentUser] = useState(sessionStorage.getItem('currentUser') ?? '');
   const [isAuthenticated, setIsAuthenticated] = useState(
     JSON.parse(sessionStorage.getItem('isAuthenticated') ?? 'false')
   );
 
   const logout = () => {
-    setCurrentUser({});
+    setCurrentUser('');
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setCurrentUser({});
+      setCurrentUser('');
       navigate('/login');
     }
   }, [isAuthenticated]);

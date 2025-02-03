@@ -11,15 +11,14 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-
   async function handleLogin(e) {
     e.preventDefault();
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return alert('Please enter a valid email');
     }
-  
+
     try {
       const response = await fetch('https://freshtrackapi.onrender.com/api/signin', {
         method: 'POST',
@@ -28,18 +27,16 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Login failed: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
       sessionStorage.setItem('token', data.token);
-      sessionStorage.setItem('isAuthenticated', true);
-      if (data.user) {
-        sessionStorage.setItem('currentUser', JSON.stringify(data.userId));
-      }
-  
+      sessionStorage.setItem('isAuthenticated', "true");
+      sessionStorage.setItem('currentUser', data.userId);
+
       navigate('/dashboard');
     } catch (error) {
       alert(error.message);

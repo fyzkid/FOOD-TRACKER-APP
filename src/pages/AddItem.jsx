@@ -8,14 +8,11 @@ const AddItem = () => {
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem('currentUser');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id);
-    }
+    const currentUser = sessionStorage.getItem('currentUser');
+    setUserId(currentUser);
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!name || !category || !expiryDate) {
@@ -60,7 +57,7 @@ const AddItem = () => {
           id='name'
           type='text'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           placeholder='Enter item name'
           className='border p-2 rounded-md w-full'
         />
@@ -70,7 +67,7 @@ const AddItem = () => {
           id='category'
           type='text'
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={e => setCategory(e.target.value)}
           placeholder='Enter category'
           className='border p-2 rounded-md w-full'
         />
@@ -80,7 +77,7 @@ const AddItem = () => {
           id='expiryDate'
           type='date'
           value={expiryDate}
-          onChange={(e) => setExpiryDate(e.target.value)}
+          onChange={e => setExpiryDate(e.target.value)}
           className='border p-2 rounded-md w-full'
         />
 
@@ -89,7 +86,7 @@ const AddItem = () => {
           id='notes'
           type='text'
           value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          onChange={e => setNotes(e.target.value)}
           placeholder='Additional notes'
           className='border p-2 rounded-md w-full'
         />
