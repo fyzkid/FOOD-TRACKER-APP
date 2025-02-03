@@ -14,11 +14,11 @@ const FoodItemTab = ({ foodItem }) => {
 
   const text = useMemo(() => {
     if (isExpired) {
-      return `Expired ${daysToExpiry} days ago`;
+      return `Expired ${daysToExpiry} ${daysToExpiry === 1 ? 'day' : 'days'} ago`;
     } else if (daysToExpiry >= 1) {
-      return `Fresh for ${daysToExpiry} days`;
+      return `Fresh for ${daysToExpiry} ${daysToExpiry === 1 ? 'day' : 'days'}`;
     } else {
-      return 'Expired today';
+      return "Expired today";
     }
   }, [isExpired, daysToExpiry]);
 
