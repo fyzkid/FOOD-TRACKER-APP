@@ -10,33 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  // function handleLogin(e) {
-  //   e.preventDefault();
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (!emailRegex.test(email)) {
-  //     return alert('Please enter a valid email');
-  //   } else {
-  //     // dummy data
-  //     const currentUser = {
-  //       name: 'John',
-  //       email: 'john@exmaple.com',
-  //       foodItems: [
-  //         { name: 'Milk', expiryDate: '2025-01-10T00:00:00Z' },
-  //         { name: 'Bread', expiryDate: '2025-01-13T00:00:00Z' },
-  //         { name: 'Apples', expiryDate: '2025-01-08T00:00:00Z' },
-  //         { name: 'Cheese', expiryDate: '2025-01-05T00:00:00Z' },
-  //       ],
-  //       notifications: [
-  //         { text: 'Milk is expiring today', timeStamp: '2025-01-05T00:00:00Z' },
-  //         { text: 'Bread expires in 2 days', timeStamp: '2025-01-05T13:00:00Z' },
-  //       ],
-  //       preferences: { dailyReminders: true, expiringSoonAlerts: true, darkMode: false },
-  //     };
-  //     sessionStorage.setItem('isAuthenticated', 'true');
-  //     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-  //     navigate('/dashboard');
-  //   }
-  // }
+
 
   async function handleLogin(e) {
     e.preventDefault();
