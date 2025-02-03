@@ -4,16 +4,19 @@ const Statistics = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userId, setUserId] = useState('');
+  const [userIdcurrentUser, setUserId] = useState('');
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem('currentUser');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id);
-    }
     const fetchStatistics = async () => {
       try {
+        const currentUser = sessionStorage.getItem('currentUser');
+
+        if (!currentUser) {
+          navigate('/login');
+          return;
+        }
+        setUserId(currentUser)
+  
         const response = await fetch(`https://freshtrackapi.onrender.com/api/statistics/${userId}`);
 
         if (!response.ok) {
