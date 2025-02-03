@@ -35,9 +35,9 @@ const Login = () => {
   
       const data = await response.json();
       sessionStorage.setItem('token', data.token);
-      sessionStorage.setItem('isAuthenticated', 'true');
+      sessionStorage.setItem('isAuthenticated', true);
       if (data.user) {
-        sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+        sessionStorage.setItem('currentUser', JSON.stringify(data.userId));
       }
   
       navigate('/dashboard');
