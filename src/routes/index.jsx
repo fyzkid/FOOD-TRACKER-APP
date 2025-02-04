@@ -8,7 +8,6 @@ const mainRoutes = [
   { index: true, path: '/dashboard', element: <Dashboard /> },
   { path: '/dashboard/add-item', element: <AddItem /> },
   { path: '/dashboard/settings', element: <Settings /> },
-  { path: '/dashboard/statistics', element: <Statistics /> },
   { path: '/dashboard/notifications', element: <Notifications /> },
 ];
 

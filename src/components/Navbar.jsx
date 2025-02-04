@@ -26,7 +26,6 @@ const Navbar = () => {
       url: '/dashboard/notifications',
       icon: <MdNotifications className='text-current w-[18px] h-[18px]' />,
     },
-    { name: 'Statistics', icon: <></>, url: '/dashboard/statistics' },
     {
       name: 'Settings',
       icon: <FaGear className='text-current w-[18px] h-[18px]' />,
