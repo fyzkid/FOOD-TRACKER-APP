@@ -51,17 +51,19 @@ const Dashboard = () => {
       sevenDaysFromNow.setDate(today.getDate() + 7);
   
       const groupedData = { active: [], upcoming: [], expired: [] };
+      Object.entries(data.items).forEach(([itemName, items]) => {
+        items.forEach(({ id, expiryDate }) => {
+          const expiry = new Date(expiryDate);
+          const itemData = { id, itemName, expiryDate };
   
-      Object.entries(data.items).forEach(([name, expiryDate]) => {
-        const expiry = new Date(expiryDate);
-  
-        if (expiry < today) {
-          groupedData.expired.push({ name, expiryDate });
-        } else if (expiry >= today && expiry <= sevenDaysFromNow) {
-          groupedData.upcoming.push({ name, expiryDate });
-        } else {
-          groupedData.active.push({ name, expiryDate });
-        }
+          if (expiry < today) {
+            groupedData.expired.push(itemData);
+          } else if (expiry >= today && expiry <= sevenDaysFromNow) {
+            groupedData.upcoming.push(itemData);
+          } else {
+            groupedData.active.push(itemData);
+          }
+        });
       });
   
       setItems(groupedData);
@@ -89,7 +91,7 @@ const Dashboard = () => {
       <div className="flex flex-col gap-3">
         {items.upcoming.length > 0 ? (
           items.upcoming.map((item, index) => (
-            <FoodItemTab key={index} foodItem={item} />
+            <FoodItemTab key={item.id} foodItem={item} />
           ))
         ) : (
           <p>No upcoming expiries</p>
