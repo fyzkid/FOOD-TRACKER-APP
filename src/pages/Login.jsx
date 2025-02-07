@@ -20,7 +20,7 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch('https://freshtrackapi.onrender.com/api/signin', {
+      const response = await fetch('https://freshtrackapi.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
