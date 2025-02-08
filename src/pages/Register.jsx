@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://localhost:3000/api/auth/signup', {
+      const response = await fetch('https://freshtrackapi.onrender.com/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
