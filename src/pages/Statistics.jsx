@@ -2,16 +2,22 @@ import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
 
 const Statistics = () => {
-  const [data, setData] = useState(null);
+  const [expiredItems, setExpiredItems] = useState([]);
+  const [activeItems, setActiveItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentUser = sessionStorage.getItem('currentUser');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://freshtrackapi.onrender.com/api/statistics/${currentUser}`);
-        const result = await response.json();
-        setData(result);
+        const expiredResponse = await fetch(`https://freshtrackapi.onrender.com/api/items/expired`);
+        const expiredData = await expiredResponse.json();
+
+        const activeResponse = await fetch(`https://freshtrackapi.onrender.com/api/items/not-expired`);
+        const activeData = await activeResponse.json();
+
+        setExpiredItems(expiredData);
+        setActiveItems(activeData);
       } catch (error) {
         console.error("Error fetching statistics:", error);
       } finally {
@@ -23,12 +29,17 @@ const Statistics = () => {
   }, []);
 
   if (loading) return <p>Loading statistics...</p>;
-  if (!data) return <p>Error loading data</p>;
+  if (!expiredItems.length && !activeItems.length) return <p>Error loading data</p>;
 
   const pieData = [
-    { name: "Expired", value: data.pieChart.expired },
-    { name: "Active", value: data.pieChart.active },
+    { name: "Expired", value: expiredItems.length },
+    { name: "Active", value: activeItems.length },
   ];
+
+  const barChartData = [...activeItems, ...expiredItems].map((item) => ({
+    itemName: item.name,
+    count: 1,
+  }));
 
   const COLORS = ["#FF5733", "#33FF57"]; // Colors for Pie Chart
 
