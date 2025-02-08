@@ -1,7 +1,7 @@
-import { FaGear } from 'react-icons/fa6';
+import { FaChartLine, FaGear } from 'react-icons/fa6';
 import { HiMiniHome } from 'react-icons/hi2';
 import { Link, useLocation } from 'react-router-dom';
-import { MdAdd, MdNotifications } from 'react-icons/md';
+import { MdAdd, MdInventory, MdNotifications } from 'react-icons/md';
 
 import logo from '../assets/icons/leaf-logo.png';
 
@@ -25,6 +25,16 @@ const Navbar = () => {
       name: 'Notifications',
       url: '/dashboard/notifications',
       icon: <MdNotifications className='text-current w-[18px] h-[18px]' />,
+    },
+    {
+      name: 'Inventory',
+      url: '/dashboard/inventory',
+      icon: <MdInventory className='text-current w-[18px] h-[18px]' />,
+    },
+    {
+      name: 'Statistics',
+      url: '/dashboard/statistics',
+      icon: <FaChartLine className='text-current w-[18px] h-[18px]' />,
     },
     {
       name: 'Settings',

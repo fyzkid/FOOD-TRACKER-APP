@@ -12,6 +12,7 @@ const Dashboard = () => {
   // } = useContext(MainContext);
   const navigate = useNavigate();
   const [items, setItems] = useState({ active: [], upcoming: [], expired: [] });
+  const[userName,setUserName] = useState('')
 
   const todayDate = useMemo(() => Date.now(), []);
   // const upcomingExpiries = useMemo(() => {
@@ -72,7 +73,16 @@ const Dashboard = () => {
     }
   }
 
+ 
+   
+
+
   useEffect(() => {
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setUserName(storedName);
+    }
+
     (async () => {
       await handleFetchDashboard();
     })();
@@ -81,7 +91,7 @@ const Dashboard = () => {
   return (
       <div className="py-8 px-4">
     <header className="flex justify-between">
-      <h1 className="font-semibold text-3xl mb-8">Welcome, {"Promyz"}!</h1>
+    <h1 className="font-semibold text-3xl mb-8">Welcome, {userName || 'User'}!</h1>
       <Link to="/dashboard/settings">
         <FaGear />
       </Link>

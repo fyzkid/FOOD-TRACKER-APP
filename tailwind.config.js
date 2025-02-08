@@ -10,6 +10,9 @@ const config = {
         text: "#333333",
         background: "#D1FAE5",
       },
+      fontFamily:{
+        poppins:['Poppins' , 'Open Sans']
+      }
     },
   },
   plugins: [],

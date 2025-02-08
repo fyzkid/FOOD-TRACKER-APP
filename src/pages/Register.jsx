@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaGoogle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import HouseImage from '../assets/icons/leaf-logo.png';
 import FormInput from '../components/FormInput';
@@ -14,7 +12,7 @@ const Login = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('https://freshtrackapi.onrender.com/api/signup', {
         method: 'POST',
@@ -23,36 +21,42 @@ const Login = () => {
         },
         body: JSON.stringify({ fullname: fullName, email, password }),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(data.message || 'Signup failed');
       }
-  
+
       alert(data.message);
       sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+
+     
+      localStorage.setItem('userName', fullName);
+
+      console.log('Stored userName:', localStorage.getItem('userName'));
+
+     
       navigate('/login');
     } catch (error) {
       alert(error.message);
     }
   };
-  
 
   return (
     <div className='w-screen h-screen flex flex-col justify-center items-center py-20'>
       <div className='flex flex-col gap-3 rounded-md p-8 shadow-lg w-[300px]'>
         <img src={HouseImage} alt='leaf logo' className='block mx-auto w-7 h-6' />
-        <p className=' text-lg text-center font-bold'>Register</p>
+        <p className='text-lg text-center font-bold'>Register</p>
 
-        <label htmlFor='email'>Full Name</label>
+        <label htmlFor='fullName'>Full Name</label>
         <FormInput
           id='fullName'
           type='text'
           value={fullName}
           autoComplete='username'
-          placeholder='Enter your fullName'
-          onChange={e => setFullName(e.target.value)}
+          placeholder='Enter your full name'
+          onChange={(e) => setFullName(e.target.value)}
         />
 
         <label htmlFor='email'>Email</label>
@@ -62,7 +66,7 @@ const Login = () => {
           value={email}
           autoComplete='username'
           placeholder='Enter your email'
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <label htmlFor='password'>Password</label>
@@ -71,7 +75,7 @@ const Login = () => {
           type='password'
           value={password}
           placeholder='Enter your password'
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
@@ -82,8 +86,8 @@ const Login = () => {
 
         <p className='text-gray-500 text-sm mx-auto'>
           Have an account?&nbsp;
-          <Link to='/Login' className='text-green-400'>
-            Sign up
+          <Link to='/login' className='text-green-400'>
+            Login
           </Link>
         </p>
       </div>

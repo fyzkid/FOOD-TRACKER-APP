@@ -37,7 +37,9 @@ const Login = () => {
       sessionStorage.setItem('isAuthenticated', "true");
       sessionStorage.setItem('currentUser', data.userId);
 
-      navigate('/dashboard');
+
+
+      navigate('/dashboard'); 
     } catch (error) {
       alert(error.message);
     }
