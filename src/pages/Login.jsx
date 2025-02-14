@@ -40,7 +40,7 @@ const Login = () => {
 
 
       navigate('/dashboard'); 
-    } catch (error) {
+    } catch (error) {  
       alert(error.message);
     }
   }
