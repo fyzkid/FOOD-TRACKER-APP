@@ -33,7 +33,7 @@ const AddItem = () => {
     const itemData = { name, category, expiryDate, notes, userId };
   
     try {
-      const response = await fetch('https://freshtrackapi.onrender.com/api/add-item', {
+      const response = await fetch('https://freshtrackapi.onrender.com/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(itemData),
