@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaCaretDown, FaEllipsisV } from 'react-icons/fa';
 
 const Inventory = () => {
-  // Dummy categories with items
+ 
   const initialCategories = {
     Fruits: [
       { id: 1, name: 'Apple', expiryDate: '2025-02-20' },

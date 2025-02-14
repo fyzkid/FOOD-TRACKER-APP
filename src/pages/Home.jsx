@@ -1,6 +1,6 @@
 import React from 'react'
 import HouseImage from '../assets/icons/leaf-logo.png';
-import Login from './Login';
+// import Login from './Login';
 import { Link } from "react-router-dom";
 
 
