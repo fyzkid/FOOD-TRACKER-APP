@@ -14,12 +14,12 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://freshtrackapi.onrender.com/api/signup', {
+      const response = await fetch('https://fresh-track-api.onrender.com/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fullname: fullName, email, password }),
+        body: JSON.stringify({ name: fullName, email, password, role: 'User' }),
       });
 
       const data = await response.json();
@@ -28,8 +28,7 @@ const Login = () => {
         throw new Error(data.message || 'Signup failed');
       }
 
-      alert(data.message);
-      sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+      sessionStorage.setItem('currentUser', JSON.stringify(data?.user?.name));
 
      
       localStorage.setItem('userName', fullName);
@@ -39,6 +38,7 @@ const Login = () => {
      
       navigate('/login');
     } catch (error) {
+      console.log(error);
       alert(error.message);
     }
   };

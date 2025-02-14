@@ -26,19 +26,15 @@ const Dashboard = () => {
 
   async function handleFetchDashboard() {
     try {
-      const currentUser = sessionStorage.getItem('currentUser');
 
-      if (!currentUser) {
-        navigate('/login');
-        return;
-      }
 
       const response = await fetch(
-        `https://freshtrackapi.onrender.com/api/dashboard/${currentUser}`,
+        `https://fresh-track-api.onrender.com/api/items`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
@@ -47,26 +43,25 @@ const Dashboard = () => {
         throw new Error(`Dashboard fetch failed: ${response.statusText}`);
       }
       const data = await response.json();
+      console.log(data);
       const today = new Date();
       const sevenDaysFromNow = new Date();
       sevenDaysFromNow.setDate(today.getDate() + 7);
   
       const groupedData = { active: [], upcoming: [], expired: [] };
-      Object.entries(data.items).forEach(([itemName, items]) => {
-        items.forEach(({ id, expiryDate }) => {
-          const expiry = new Date(expiryDate);
-          const itemData = { id, itemName, expiryDate };
-  
-          if (expiry < today) {
-            groupedData.expired.push(itemData);
-          } else if (expiry >= today && expiry <= sevenDaysFromNow) {
-            groupedData.upcoming.push(itemData);
-          } else {
-            groupedData.active.push(itemData);
-          }
-        });
+      data.forEach(({ _id, itemName, expiryDate }) => {
+        const expiry = new Date(expiryDate);
+        const itemData = { id: _id, itemName, expiryDate };
+      
+        if (expiry <= today) {
+          groupedData.expired.push(itemData);
+        } else if (expiry > today && expiry <= sevenDaysFromNow) {
+          groupedData.upcoming.push(itemData);
+        } else {
+          groupedData.active.push(itemData);
+        }
       });
-  
+      
       setItems(groupedData);
     } catch (error) {
       console.log(error.message);

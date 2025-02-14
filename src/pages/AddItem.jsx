@@ -5,7 +5,7 @@ const AddItem = () => {
   const [category, setCategory] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [notes, setNotes] = useState('');
-  const [userId, setUserId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Predefined categories for the dropdown
   const categories = [
@@ -19,7 +19,7 @@ const AddItem = () => {
 
   useEffect(() => {
     const currentUser = sessionStorage.getItem('currentUser');
-    setUserId(currentUser);
+
   }, []);
 
   const handleSubmit = async (e) => {
@@ -30,23 +30,35 @@ const AddItem = () => {
       return;
     }
   
-    const itemData = { name, category, expiryDate, notes, userId };
+    // const itemData = { name, category, expiryDate, notes, userId };
   
     try {
-      const response = await fetch('https://freshtrackapi.onrender.com/api/add-item', {
+    setIsLoading(true);
+      const response = await fetch('https://fresh-track-api.onrender.com/api/items', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemData),
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          itemName: name,
+          category: category,
+          expiryDate: expiryDate,
+          notes: notes,
+          datePurchased: new Date().toISOString(),
+          dailyRemainder: false,
+        }),
       });
   
       const data = await response.json();
   
       if (!response.ok) {
+      setIsLoading(false);
         throw new Error(data.message || 'Failed to add item');
       }
   
       alert('Item added successfully!');
-      
+      setIsLoading(false);
       // Dispatch event to refresh inventory
       window.dispatchEvent(new Event("refreshInventory"));
   
@@ -116,11 +128,11 @@ const AddItem = () => {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          disabled={!userId}
+          disabled={isLoading}
           className={`h-10 w-full text-white text-sm rounded-md mt-3 ${
-            userId ? 'bg-green-500' : 'bg-gray-400 cursor-not-allowed'
+            !isLoading ? 'bg-green-500' : 'bg-gray-400 cursor-not-allowed'
           }`}>
-          {userId ? 'Add Item' : 'Loading...'}
+          {!isLoading ? 'Add Item' : 'Loading...'}
         </button>
       </div>
     </div>

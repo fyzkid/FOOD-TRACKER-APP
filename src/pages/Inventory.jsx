@@ -1,37 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaCaretDown, FaEllipsisV } from 'react-icons/fa';
+import { deleteItem, editItem, getInventory } from '../api/getInventory';
 
 const Inventory = () => {
+
+  const categorizeItems = (data) => {
+    const categorizedData = {};
+  
+    data.forEach(({ _id, itemName, category, expiryDate }) => {
+      if (!categorizedData[category]) {
+        categorizedData[category] = [];
+      }
+  
+      categorizedData[category].push({
+        id: _id,
+        name: itemName,
+        expiryDate,
+      });
+    });
+  
+    return categorizedData;
+  };
   // Dummy categories with items
   const initialCategories = {
-    Fruits: [
-      { id: 1, name: 'Apple', expiryDate: '2025-02-20' },
-      { id: 2, name: 'Banana', expiryDate: '2025-02-25' },
-    ],
-    Vegetables: [
-      { id: 3, name: 'Carrot', expiryDate: '2025-03-15' },
-      { id: 4, name: 'Lettuce', expiryDate: '2025-03-20' },
-    ],
-    Medicine: [
-      { id: 5, name: 'Panadol', expiryDate: '2025-03-21' },
-      { id: 6, name: 'Paracetamol', expiryDate: '2025-06-09' },
-    ],
-    Bakery: [
-      { id: 7, name: 'Bread', expiryDate: '2025-02-28' },
-      { id: 8, name: 'Cake', expiryDate: '2025-03-05' },
-    ],
-    BeautyProducts: [
-      { id: 9, name: 'Cream', expiryDate: '2025-07-28' },
-      { id: 10, name: 'Soap', expiryDate: '2025-04-05' },
-    ],
-    Drinks: [
-      { id: 11, name: 'Soda', expiryDate: '2025-04-10' },
-      { id: 12, name: 'Juice', expiryDate: '2025-04-15' },
-    ],
+   
   };
 
   // State to manage categories & dropdown visibility
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
   const [categories, setCategories] = useState(initialCategories);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -51,17 +49,23 @@ const Inventory = () => {
   };
 
   // Delete an item
-  const handleDelete = () => {
-    setCategories((prevCategories) => {
-      const updatedCategories = { ...prevCategories };
-      for (const category in updatedCategories) {
-        updatedCategories[category] = updatedCategories[category].filter(
-          (item) => item.id !== selectedItem.id
-        );
-      }
-      return updatedCategories;
-    });
-    setShowOptions(false);
+  const handleDelete = async () => {
+    try {
+      await deleteItem(selectedItem.id).then(() => {
+        setCategories((prevCategories) => {
+          const updatedCategories = { ...prevCategories };
+          for (const category in updatedCategories) {
+            updatedCategories[category] = updatedCategories[category].filter(
+              (item) => item.id !== selectedItem.id
+            );
+          }
+          return updatedCategories;
+        });
+        setShowOptions(false);
+      });
+    }catch(error){
+      alert(error.message);
+    }
   };
 
   // Open edit modal
@@ -72,18 +76,47 @@ const Inventory = () => {
   };
 
   // Save edited item
-  const handleEditSave = () => {
-    setCategories((prevCategories) => {
-      const updatedCategories = { ...prevCategories };
-      for (const category in updatedCategories) {
-        updatedCategories[category] = updatedCategories[category].map((item) =>
-          item.id === editedItem.id ? editedItem : item
-        );
-      }
-      return updatedCategories;
-    });
-    setShowEditModal(false);
+  const handleEditSave = async () => {
+    try {
+      const getFullData = data.find((item) => item.id === editedItem.id);
+      const editedItemData = {
+        itemName: editedItem.name,
+        category: editedItem.category,
+        expiryDate: editedItem.expiryDate,
+        notes: editedItem.notes,
+        datePurchased: getFullData.datePurchased,
+        dailyRemainder: getFullData.dailyRemainder,
+      };
+      await editItem(editedItem.id, editedItemData).then(() => {
+        setCategories((prevCategories) => {
+          const updatedCategories = { ...prevCategories };
+          for (const category in updatedCategories) {
+            updatedCategories[category] = updatedCategories[category].map((item) =>
+              item.id === editedItem.id ? editedItem : item
+            );
+          }
+          return updatedCategories;
+        });
+        setShowEditModal(false);
+      });
+    }catch(error){
+      alert(error.message);
+    }
   };
+
+  useEffect(() => {
+    try {
+      getInventory().then((data) => {
+        console.log(data);
+        const categorizedData = categorizeItems(data);
+        setData(data);
+        setTotal(data.length);
+        setCategories(categorizedData); 
+      })
+    }catch(error){
+      alert(error.message);
+    }
+  }, []);
 
   return (
     <div className='w-[90%] mx-auto'>
@@ -101,7 +134,7 @@ const Inventory = () => {
           <input type="text" placeholder='Search Items....' className='py-2 px-6 rounded shadow '/>
         </div>
         <div>
-          <button className='bg-white py-2 px-3 rounded text-text'>Total Items <br /> 242</button>
+          <button className='bg-white py-2 px-3 rounded text-text'>Total Items <br /> {total}</button>
         </div>
       </div>
 
